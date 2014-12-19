@@ -19,30 +19,9 @@ def color(r, g, b):
     assert(g < 64)
     return r << 11 | g << 5 | b
 
-def create_sprial(size=(1440, 900)):
-    array = np.zeros(size) 
-    for n in range(100):
-        x = int(n*np.cos(n))
-        y = int(n*np.sin(n))
-        array[x, y] = 2**16
-    return array
+#go all flashy. on the rpi this is slow enough to appreciate.
+for r in range(32):
+    for g in range(64):
+        for b in range(32):
+            fb[:] = color(r, g, b)
 
-sprial = np.zeros((1440, 900), dtype='uint16') 
-for n in range(100):
-    x = int(n*np.cos(n))
-    y = int(n*np.sin(n))
-    x += 1440/2
-    y += 900/2
-    sprial[x, y] = 2**16-1
-
-
-sprial = np.zeros((1440, 900), dtype='uint16') 
-for x in np.linspa:
-    for y in range(900):
-        if int(np.sqrt(x**2 + y**2)) == 100:
-            sprial[x, y] = 2**16-1
-
-fb[:] = 
-
-def color(r, g, b):
-    return r << 11 | g << 5 | b

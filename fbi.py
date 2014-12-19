@@ -12,7 +12,7 @@ if __name__ == '__main__':
     old_settings = termios.tcgetattr(fileno)
     
     reader = mp.Process(target=readchar.main, args=(charqueue, fileno))
-    game = mp.Process(target=pong.main, args=(charqueue,))
+    game = mp.Process(target=rainbow.main, args=(sys.argv, charqueue))
     reader.start()
     game.start()
 
@@ -20,3 +20,4 @@ if __name__ == '__main__':
     game.join()
     reader.terminate()
     termios.tcsetattr(fileno, termios.TCSADRAIN, old_settings)
+    sys.exit(0)

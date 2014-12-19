@@ -6,10 +6,6 @@ import sys
 #1440, 900 as shape as that is the res of my display
 #uint16 - 16 bit values for color
 fb = np.memmap('/dev/fb1', mode='w+', dtype='uint16', shape=(900, 1440))
-n=1
-while 1:
-    fb[n, n] = 65535
-    n += 1
 
 img = Image.open(sys.argv[1])
 
@@ -20,10 +16,9 @@ img = img.convert('RGB')
 x, y = img.size
 imgarray = np.array(img)[:,:,:3] # get the image as a numpy array as an array
 
-#array with the same shape - will be cast on assignment to uint16! no worries
-black = np.zeros((1440, 900))
+
 #reasonably fast
-fb[:] = black
+fb[:] = 0
 
 
 def color(r, g, b):
@@ -35,9 +30,9 @@ r = np.floor(imgarray[:,:,0] / 256 * 32).astype('int') # conversion needs to hap
 g = np.floor(imgarray[:,:,1] / 256 * 64).astype('int')
 b = np.floor(imgarray[:,:,2] / 256 * 32).astype('int')
 flattenedarray = color(r, g, b)
-fb[0:y, 0:x] = flattenedarray
-
-n=1
+xo, yo = 0, 0
 while 1:
-    fb[n, n] = 65535
-    n += 1
+    fb[yo:y+yo, xo:x+xo] = flattenedarray
+    fb[:] = 0
+    xo += 1
+

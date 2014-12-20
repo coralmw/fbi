@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import Image
 import time
+import sys
 
 def color(r, g, b):
     #16 bit has 5 bit r, b and 6-bit g
@@ -9,23 +10,32 @@ def color(r, g, b):
 
 def loop(charqueue, imgbytes, framebuffer):
     xo, yo = 0, 0
-    xs, ys = imgbytes.size
+    xs, ys = imgbytes.shape
+    framebuffer[xo:xo+xs, yo:yo+ys] = imgbytes
     while 1:
-        if charqueue:
-            fb[:] = 0 # blank for update
+        if not charqueue.empty():
+            framebuffer[:] = 0 # blank for update
+            while not charqueue.empty():
+                char = charqueue.get()
+                if char == 'w':
+                    yo -= 1
+                elif char == 's':
+                    yo += 1
+                elif char == 'a':
+                    xo -= 1
+                elif char == 'd':
+                    xo += 1
+                elif char == 'q':
+                    exit()
+            print('paint to {}, {}'.format(xo, yo))
+            framebuffer[xo:xo+xs, yo:yo+ys] = imgbytes
         else:
-            time.sleep(0.01) # lets not kill a cpu.
-        while charqueue:
-            char = charqueue.get()
-            if char == 'w':
-                yo -= 1
-            elif char == 's':
-                yo += 1
-            elif char == 'a':
-                xo -= 1
-            elif char == 'd':
-                xo += 1
-        fb[xo:xo+xs, yo:yo+ys] = imgbytes
+            time.sleep(0.001) # lets not kill a cpu.
+
+
+def exit():
+    print('recieved kill')
+    sys.exit()
 
 
 def main(args, charqueue):

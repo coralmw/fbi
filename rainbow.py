@@ -10,8 +10,9 @@ def color(r, g, b):
 
 def loop(charqueue, imgbytes, framebuffer):
     xo, yo = 0, 0
-    xs, ys = imgbytes.shape
-    framebuffer[xo:xo+xs, yo:yo+ys] = imgbytes
+    ys, xs = imgbytes.shape
+    print(xs, ys)
+    framebuffer[yo:yo+ys, xo:xo+xs] = imgbytes
     while 1:
         if not charqueue.empty():
             while not charqueue.empty():
@@ -29,7 +30,7 @@ def loop(charqueue, imgbytes, framebuffer):
                     exit()
             #print('paint to {}, {}'.format(xo, yo))
             framebuffer[:] = 0 # blank for update
-            framebuffer[xo:xo+xs, yo:yo+ys] = imgbytes
+            framebuffer[yo:yo+ys, xo:xo+xs] = imgbytes
         else:
             time.sleep(0.001) # lets not kill a cpu.
 

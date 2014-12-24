@@ -14,8 +14,8 @@ def loop(charqueue, imgbytes, framebuffer):
     framebuffer[xo:xo+xs, yo:yo+ys] = imgbytes
     while 1:
         if not charqueue.empty():
-            framebuffer[:] = 0 # blank for update
             while not charqueue.empty():
+                print('procesing move')
                 char = charqueue.get()
                 if char == 'w':
                     yo -= 1
@@ -27,7 +27,8 @@ def loop(charqueue, imgbytes, framebuffer):
                     xo += 1
                 elif char == 'q':
                     exit()
-            print('paint to {}, {}'.format(xo, yo))
+            #print('paint to {}, {}'.format(xo, yo))
+            framebuffer[:] = 0 # blank for update
             framebuffer[xo:xo+xs, yo:yo+ys] = imgbytes
         else:
             time.sleep(0.001) # lets not kill a cpu.
@@ -42,7 +43,7 @@ def main(args, charqueue):
     #memory map the framebuffer as a numpy array
     #1440, 900 as shape as that is the res of my display
     #uint16 - 16 bit values for color
-    fb = np.memmap('/dev/fb1', mode='w+', dtype='uint16', shape=(900, 1440))
+    fb = np.memmap('/dev/fb1', mode='w+', dtype='uint16', shape=(1080, 1920))
     fb[:] = 0 # blank the display
 
     img = Image.open(args[1])

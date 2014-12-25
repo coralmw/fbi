@@ -15,8 +15,9 @@ def loop(charqueue, imgbytes, framebuffer):
     framebuffer[yo:yo+ys, xo:xo+xs] = imgbytes
     while 1:
         if not charqueue.empty():
+            framebuffer[yo:yo+ys, xo:xo+xs] = 0 #blank the orj location
             while not charqueue.empty():
-                print('procesing move')
+                #print('procesing move')
                 char = charqueue.get()
                 if char == 'w':
                     yo -= 1
@@ -29,10 +30,10 @@ def loop(charqueue, imgbytes, framebuffer):
                 elif char == 'q':
                     exit()
             #print('paint to {}, {}'.format(xo, yo))
-            framebuffer[:] = 0 # blank for update
             framebuffer[yo:yo+ys, xo:xo+xs] = imgbytes
         else:
-            time.sleep(0.001) # lets not kill a cpu.
+            pass
+            #time.sleep(0.001) # lets not kill a cpu.
 
 
 def exit():
